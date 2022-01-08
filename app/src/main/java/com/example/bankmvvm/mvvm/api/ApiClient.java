@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private String baseUrl = "http://185.224.179.114:8090/";
+    private String baseUrl = "local/";
     private static final int TIME_OUT = 180;
     private static ApiClient instance;
     private static APIServiceRxjava apiServiceRxjavaInstance = null;
