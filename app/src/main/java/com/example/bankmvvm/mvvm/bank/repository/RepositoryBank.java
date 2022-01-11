@@ -1,27 +1,28 @@
 package com.example.bankmvvm.mvvm.bank.repository;
 
-import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
+import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 
 import com.example.bankmvvm.mvvm.api.APIServiceRxjava;
 import com.example.bankmvvm.mvvm.api.ApiClient;
-import com.example.bankmvvm.mvvm.api.RetrofitResponse;
 import com.example.bankmvvm.mvvm.bank.model.BankModel;
+import com.example.bankmvvm.mvvm.base.BaseApp;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Response;
+
 
 public class RepositoryBank {
 
     APIServiceRxjava apiServiceRxjava = ApiClient.getInstance().getApiServiceRxjava();
     private static RepositoryBank instance;
+
 
     public static RepositoryBank getInstance() {
         if (instance == null)
@@ -29,39 +30,26 @@ public class RepositoryBank {
         return instance;
     }
 
-    public void getAllBank(CompositeDisposable compositeDisposable,RetrofitResponse response) {
 
-        apiServiceRxjava.getBank()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<Response<GetBankResponce>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
+    public Observable<Response<GetBankResponce>> getAllBank() {
+      return   apiServiceRxjava.getBank()
+                .subscribeOn(Schedulers.io());
 
-                    @Override
-                    public void onNext(Response<GetBankResponce> getBankResponceResponse) {
-                        if (getBankResponceResponse.body().getSuccess()){
-                            response.onSuccess(getBankResponceResponse.body().getGetBankModels());
-                        } else {
-                            response.onFailed(getBankResponceResponse.body().getMessage());
-                        }
+    }
 
-                    }
+    public Observable<List<BankModel>> getAllBankDataBase(){
+        return ((BaseApp) getApplicationContext()).getBankDataBase().bankDao().getAllBank()
+                .subscribeOn(Schedulers.io());
 
-                    @Override
-                    public void onError(Throwable e) {
-                        response.onFailed(e.getMessage());
-                    }
+    }
 
-                    @Override
-                    public void onComplete() {
-                        if (!compositeDisposable.isDisposed()) {
-                            compositeDisposable.dispose();
-                        }
-                        compositeDisposable.clear();
-                    }
-                });
+    public Single<Integer> deleteAll(){
+        return  ((BaseApp) getApplicationContext()).getBankDataBase().bankDao().delete();
+    }
+
+    public Single<Long[]> insertAll(List<BankModel> models){
+         return  ((BaseApp) getApplicationContext()).getBankDataBase().bankDao().insertBanks(models);
+
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.bankmvvm.mvvm.bank;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.example.bankmvvm.R;
@@ -29,10 +31,11 @@ public class BankView extends AppCompatActivity implements OnclickBankName  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this,R.layout.activity_bank_view);
         viewModel = new ViewModelProvider(this).get(BankViewModel.class);
         recyclerView = binding.recycler;
-        viewModel.getListMutableLiveData();
+        viewModel.getListMutableLiveData(this);
 
         viewModel.getListBankLiveData().observe(this, bankModels -> {
             recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
@@ -43,6 +46,9 @@ public class BankView extends AppCompatActivity implements OnclickBankName  {
         viewModel.errorMassage().observe(this, error -> {
             Toast.makeText(this,error,Toast.LENGTH_SHORT).show();
         });
+
+
+
     }
 
     @Override
@@ -50,4 +56,10 @@ public class BankView extends AppCompatActivity implements OnclickBankName  {
         Log.i("clickAdapter" , bank.getNameBank());
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.clearRam();
+    }
 }

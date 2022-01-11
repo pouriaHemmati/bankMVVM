@@ -1,6 +1,8 @@
 package com.example.bankmvvm.mvvm.api;
 
 
+
+
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -9,11 +11,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private String baseUrl = "local/";
+    private String baseUrl = "http://185.224.179.114:8090/";
     private static final int TIME_OUT = 180;
     private static ApiClient instance;
     private static APIServiceRxjava apiServiceRxjavaInstance = null;
@@ -41,7 +44,7 @@ public class ApiClient {
                 .Builder()
                 .client(client)
                 .baseUrl(baseURL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create());
 
 
@@ -51,7 +54,6 @@ public class ApiClient {
     }
 
     public APIServiceRxjava getApiServiceRxjava() {
-
         if (apiServiceRxjavaInstance == null)
             apiServiceRxjavaInstance = createService(APIServiceRxjava.class, baseUrl);
         return apiServiceRxjavaInstance;

@@ -4,11 +4,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BankResponceModel {
     @SerializedName("Data")
     @Expose
-    private ArrayList<BankModel> data = null;
+    private List<BankModel> data = null;
     @SerializedName("Message")
     @Expose
     private String message;
@@ -22,11 +23,11 @@ public class BankResponceModel {
     @Expose
     private int totalCount;
 
-    public ArrayList<BankModel> getData() {
+    public List<BankModel> getData() {
         return data;
     }
 
-    public void setData(ArrayList<BankModel> data) {
+    public void setData(List<BankModel> data) {
         this.data = data;
     }
 

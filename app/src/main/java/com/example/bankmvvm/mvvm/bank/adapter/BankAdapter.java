@@ -12,20 +12,23 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.example.bankmvvm.BR;
 import com.example.bankmvvm.R;
 import com.example.bankmvvm.databinding.ItemBankBinding;
 import com.example.bankmvvm.mvvm.bank.model.BankModel;
 
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class BankAdapter extends RecyclerView.Adapter<BankAdapter.MyViewHolder>  {
     Context context;
-    ArrayList<BankModel> models;
+    List<BankModel> models;
     OnclickBankName onclickBankName;
     private int lastPosition = -1;
 
-    public BankAdapter(Context context, ArrayList<BankModel> models,OnclickBankName onclickBankName) {
+    public BankAdapter(Context context, List<BankModel> models,OnclickBankName onclickBankName) {
         this.context = context;
         this.models = models;
         this.onclickBankName = onclickBankName;
